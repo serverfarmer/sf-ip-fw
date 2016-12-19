@@ -1,5 +1,6 @@
 sf-ip-fw extension provides several building blocks to build your
-own firewall solution, based on raw iptables.
+own firewall solution, based on raw iptables. FreeBSD (ipfw)
+support is planned in the future.
 
 These building blocks currently are used by custom non-public
 firewalling solutions made by Fajne.IT for its customers, but this
