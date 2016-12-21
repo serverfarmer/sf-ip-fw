@@ -1,5 +1,18 @@
 #!/bin/bash
 
+append_rule() {
+	protocol=$1
+	port=$2
+	ip=$3
+
+	if [ "$protocol" = "tcp" ]; then
+		iptables -A INPUT -p tcp -m state --state NEW -j ACCEPT -s $ip --dport $port
+	else
+		iptables -A INPUT -p udp -j ACCEPT -s $ip --dport $port
+	fi
+}
+
+
 if [ "$3" = "" ]; then
 	echo "usage: $0 <protocol> <port> <ip-range> [ip-range] [...]"
 	exit 1
@@ -24,12 +37,13 @@ if [ "$1" = "all" ]; then
 	fi
 else
 	for ip in $@; do
-		if ! [[ $ip =~ ^[0-9]+[.][0-9]+[.][0-9]+[.][0-9/]+$ ]]; then
-			echo "error: parameter $ip not conforming ip range format, skipping it"
-		elif [ "$protocol" = "tcp" ]; then
-			iptables -A INPUT -p tcp -m state --state NEW -j ACCEPT -s $ip --dport $port
+		if [[ $ip =~ ^[0-9]+[.][0-9]+[.][0-9]+[.][0-9/]+$ ]]; then
+			append_rule $protocol $port $ip
+		elif [ "`getent hosts $ip`" != "" ]; then
+			ip2=`getent hosts $ip |cut -f1 -d' '`
+			append_rule $protocol $port $ip2
 		else
-			iptables -A INPUT -p udp -j ACCEPT -s $ip --dport $port
+			echo "error: parameter $ip not conforming ip range format, skipping it"
 		fi
 	done
 fi
