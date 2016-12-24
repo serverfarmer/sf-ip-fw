@@ -29,7 +29,7 @@ port=$2
 shift
 shift
 
-if [ "$1" = "all" ]; then
+if [ "$1" = "any" ]; then
 	if [ "$protocol" = "tcp" ]; then
 		iptables -A INPUT -p tcp -m state --state NEW -j ACCEPT --dport $port
 	else
