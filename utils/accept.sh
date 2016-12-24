@@ -5,10 +5,22 @@ append_rule() {
 	port=$2
 	ip=$3
 
-	if [ "$protocol" = "tcp" ]; then
-		iptables -A INPUT -p tcp -m state --state NEW -j ACCEPT -s $ip --dport $port
+	if [ "$port" = "any" ]; then
+		dport=""
 	else
-		iptables -A INPUT -p udp -j ACCEPT -s $ip --dport $port
+		dport="--dport $port"
+	fi
+
+	if [ "$ip" = "any" ]; then
+		sip=""
+	else
+		sip="-s $ip"
+	fi
+
+	if [ "$protocol" = "tcp" ]; then
+		iptables -A INPUT -p tcp -m state --state NEW -j ACCEPT $sip $dport
+	else
+		iptables -A INPUT -p udp -j ACCEPT $sip $dport
 	fi
 }
 
@@ -19,8 +31,11 @@ if [ "$3" = "" ]; then
 elif [ "$1" != "tcp" ] && [ "$1" != "udp" ]; then
 	echo "error: invalid protocol specified"
 	exit 1
-elif ! [[ $2 =~ ^[0-9:]+$ ]]; then
+elif ! [[ $2 =~ ^[0-9:]+$ ]] && [ "$2" != "any" ]; then
 	echo "error: parameter $2 not conforming port(s) format"
+	exit 1
+elif [ "$2" = "any" ] && [ "$3" = "any" ]; then
+	echo "error: cannot set both port and source ip to any, choose only one of them"
 	exit 1
 fi
 
@@ -30,11 +45,7 @@ shift
 shift
 
 if [ "$1" = "any" ]; then
-	if [ "$protocol" = "tcp" ]; then
-		iptables -A INPUT -p tcp -m state --state NEW -j ACCEPT --dport $port
-	else
-		iptables -A INPUT -p udp -j ACCEPT --dport $port
-	fi
+	append_rule $protocol $port $1
 else
 	for ip in $@; do
 		if [[ $ip =~ ^[0-9]+[.][0-9]+[.][0-9]+[.][0-9/]+$ ]]; then
