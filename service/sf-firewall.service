@@ -1,0 +1,14 @@
+[Unit]
+Description=Server Farmer Firewall
+DefaultDependencies=no
+Before=network.target
+Conflicts=ufw.service shutdown.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/opt/farm/ext/firewall/start.sh
+ExecStop=/opt/farm/ext/ip-fw/utils/stop.sh
+
+[Install]
+WantedBy=multi-user.target
