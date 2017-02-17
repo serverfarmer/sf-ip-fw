@@ -50,7 +50,7 @@ else
 	for ip in $@; do
 		if [[ $ip =~ ^[0-9]+[.][0-9]+[.][0-9]+[.][0-9/]+$ ]]; then
 			append_rule $protocol $port $ip
-		elif [ "`getent hosts $ip |grep -v ^127`" != "" ]; then
+		elif [ "`getent hosts $ip |grep -v ^127 |grep -v :`" != "" ]; then
 			ip2=`getent hosts $ip |cut -f1 -d' '`
 			append_rule $protocol $port $ip2
 		else
