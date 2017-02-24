@@ -9,6 +9,10 @@
 ### END INIT INFO
 
 
+if [ ! -x /opt/farm/ext/firewall/start.sh ]; then
+	exit 1
+fi
+
 case "$1" in
 	start)
 		echo -n "Starting firewall:"

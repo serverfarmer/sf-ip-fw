@@ -6,7 +6,7 @@
 # description: Server Farmer Firewall
 
 
-if [ -f /etc/sysconfig/iptables ] || [ -f /etc/sysconfig/ip6tables ]; then
+if [ ! -x /opt/farm/ext/firewall/start.sh ] || [ -f /etc/sysconfig/iptables ] || [ -f /etc/sysconfig/ip6tables ]; then
 	exit 1
 fi
 
