@@ -33,6 +33,9 @@ elif ! [[ $2 =~ ^[0-9:]+$ ]] && [ "$2" != "any" ]; then
 elif [ "$2" = "any" ] && [ "$3" = "any" ]; then
 	echo "error: cannot set both port and source ip to any, choose only one of them"
 	exit 1
+elif [ ! -x /usr/bin/dockerd ]; then
+	echo "warning: no dockerd found, skipping docker-related rule \"$@\""
+	exit 0
 fi
 
 protocol=$1
