@@ -4,6 +4,8 @@
 #   https://gist.github.com/rwoeber/1010044/55de2c1920e0df6c488ac4d14f3cc2eca796efb4
 #   https://www.cyberciti.biz/faq/howto-setup-freebsd-ipfw-firewall/
 #   https://www.babaei.net/blog/2015/07/30/freebsd-block-brute-force-attacks-using-sshguard-and-ipfw-firewall/
+#   https://www.vultr.com/docs/enhancing-security-for-freebsd-using-ipfw-and-sshguard
+#   https://paulgorman.org/technical/freebsd-ipfw.txt
 
 ip6tables --flush
 ip6tables --policy INPUT DROP
