@@ -24,7 +24,8 @@ if [ "$OSTYPE" = "debian" ]; then
 	if ! grep -qFx $OSVER /opt/farm/ext/ip-fw/config/use-systemd.conf; then
 		echo "setting up classic firewall"
 		f=/etc/init.d/sf-firewall
-		install_link /opt/farm/ext/ip-fw/service/rc-debian.sh $f
+		remove_link $f
+		install_copy /opt/farm/ext/ip-fw/service/rc-debian.sh $f
 		update-rc.d sf-firewall start 21 2 3 4 5 . stop 89 0 1 6 .
 		$f restart
 	elif [ ! -f /etc/systemd/system/sf-firewall.service ]; then
@@ -42,7 +43,8 @@ elif [ "$OSTYPE" = "redhat" ] && [ -x /sbin/chkconfig ]; then
 	echo "setting up firewall"
 	f=/etc/init.d/sf-firewall
 	if [ "`chkconfig --list |grep sf-firewall`" = "" ]; then
-		install_link /opt/farm/ext/ip-fw/service/rc-redhat.sh $f
+		remove_link $f
+		install_copy /opt/farm/ext/ip-fw/service/rc-redhat.sh $f
 		chkconfig --add sf-firewall
 	else
 		chkconfig sf-firewall on
