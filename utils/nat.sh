@@ -23,11 +23,11 @@ fi
 
 if [[ $5 =~ ^[0-9]+[.][0-9]+[.][0-9]+[.][0-9]+$ ]]; then
 	target=$5:$6
-elif [ "`getent hosts $5 |grep -v ^127 |grep -v :`" != "" ]; then
-	ip=`getent hosts $5 |cut -f1 -d' '`
-	target=$ip:$6
 elif [ "`cat /var/lib/misc/dnsmasq.*.leases |cut -f3,4 -d' ' |grep $5$`" != "" ]; then
 	ip=`cat /var/lib/misc/dnsmasq.*.leases |cut -f3,4 -d' ' |grep $5$ |cut -f1 -d' '`
+	target=$ip:$6
+elif [ "`getent hosts $5 |grep -v ^127 |grep -v :`" != "" ]; then
+	ip=`getent hosts $5 |cut -f1 -d' '`
 	target=$ip:$6
 else
 	echo "error: parameter $5 not conforming ip/hostname format"
