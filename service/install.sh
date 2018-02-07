@@ -12,13 +12,13 @@ elif [ -f /etc/sysconfig/iptables ] || [ -f /etc/sysconfig/ip6tables ]; then
 fi
 
 if [ "$OSTYPE" = "debian" ]; then
-	install_deb iptables
+	/opt/farm/ext/repos/package/install.sh iptables
 
 	if [ "`which ufw`" != "" ]; then
 		echo "disabling ufw firewall"
 		ufw status >/etc/local/.config/ufw.last-status
 		ufw disable
-		uninstall_deb ufw
+		/opt/farm/ext/repos/package/uninstall.sh ufw
 	fi
 
 	if ! grep -qFx $OSVER /opt/farm/ext/ip-fw/config/use-systemd.conf; then
