@@ -11,6 +11,8 @@ elif [ -f /etc/sysconfig/iptables ] || [ -f /etc/sysconfig/ip6tables ]; then
 	exit 0
 fi
 
+f=/etc/init.d/sf-firewall
+
 if [ "$OSTYPE" = "debian" ]; then
 	/opt/farm/ext/packages/utils/install.sh iptables
 
@@ -21,10 +23,16 @@ if [ "$OSTYPE" = "debian" ]; then
 		/opt/farm/ext/packages/utils/uninstall.sh ufw
 	fi
 
-	if ! grep -qFx $OSVER /opt/farm/ext/ip-fw/config/use-systemd.conf; then
-		echo "setting up classic firewall"
-		f=/etc/init.d/sf-firewall
+	if [ -h $f ]; then
+		echo "removing classic firewall installed by symlink"
 		remove_link $f
+	fi
+
+	if [ -f $f ]; then
+		echo "classic firewall already installed, restarting"
+		$f restart
+	elif ! grep -qFx $OSVER /opt/farm/ext/ip-fw/config/use-systemd.conf; then
+		echo "setting up classic firewall"
 		install_copy /opt/farm/ext/ip-fw/service/rc-debian.sh $f
 		update-rc.d sf-firewall start 21 2 3 4 5 . stop 89 0 1 6 .
 		$f restart
@@ -41,7 +49,6 @@ if [ "$OSTYPE" = "debian" ]; then
 elif [ "$OSTYPE" = "redhat" ] && [ -x /sbin/chkconfig ]; then
 
 	echo "setting up firewall"
-	f=/etc/init.d/sf-firewall
 	if [ "`chkconfig --list |grep sf-firewall`" = "" ]; then
 		remove_link $f
 		install_copy /opt/farm/ext/ip-fw/service/rc-redhat.sh $f
