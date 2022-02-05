@@ -1,6 +1,6 @@
 ## Overview
 
-`sf-ip-fw` extension provides several building blocks to build your own firewall solution, based on raw iptables. You can build your firewall scripts as simple shell scripts, portable across all major Linux distributions:
+`sf-ip-fw` extension provides several building blocks to build your own firewall solution, based on raw iptables. You can build your firewall profiles for each machine as simple shell scripts, portable across all major Linux distributions:
 - Debian since 5.0 (Lenny)
 - Ubuntu since 8.04 LTS
 - Raspbian all versions
