@@ -180,7 +180,7 @@ $dck tcp 3000:4999 $DOCKERONLY $YOUROFFICE
 
 ### Example per-host profile for internal LAN webserver, exposed via SSL-terminating proxy
 
-This example assumes that `proxy` resolved to the IP address of your LAN proxy server. This way, unencrypted web traffic is exchanged only between the application webserver, and proxy.
+This example assumes that `proxy` hostname properly resolves to the IP address of your LAN proxy server. This way, unencrypted web traffic is exchanged only between the application webserver, and proxy.
 
 It can be easily combined with LXC services, where you have eg. 500 LXC containers with Apache or something else (separately for each customer), and additional LXC container with Nginx responsible for terminating SSL connections, and keeping SSL certificates away from direct customer access.
 
